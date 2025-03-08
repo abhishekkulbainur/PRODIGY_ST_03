@@ -1,0 +1,163 @@
+import unittest
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from time import sleep
+
+class LoginTestSuite(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        # Set up the WebDriver for Chrome (You can use other browsers like Firefox, Edge, etc.)
+        cls.driver = webdriver.Chrome(executable_path='/path/to/chromedriver')  # Replace with your ChromeDriver path
+        cls.driver.get("https://your-website.com/login")  # Replace with your website URL
+    
+    def test_valid_login(self):
+        """Positive Test Case: Test valid credentials."""
+        
+        driver = self.driver
+        
+        # Find username, password fields and submit button
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login_button")
+        
+        # Fill in the login details (valid credentials)
+        username_field.send_keys("validUser")
+        password_field.send_keys("validPassword")
+        
+        # Click the login button
+        login_button.click()
+        
+        # Wait until login is successful (check for a specific element that only appears after login)
+        WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "welcome_message")))  # Change as per your site
+        
+        # Verify successful login (check for the presence of a specific element after login)
+        welcome_message = driver.find_element(By.ID, "welcome_message")
+        self.assertEqual(welcome_message.text, "Welcome validUser")
+        
+    def test_invalid_username(self):
+        """Negative Test Case: Test invalid username."""
+        
+        driver = self.driver
+        
+        # Find username, password fields and submit button
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login_button")
+        
+        # Fill in the login details (invalid username)
+        username_field.send_keys("invalidUser")
+        password_field.send_keys("validPassword")
+        
+        # Click the login button
+        login_button.click()
+        
+        # Wait for error message
+        error_message = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "error_message")))  # Change as per your site
+        
+        # Verify that the error message appears for invalid username
+        self.assertEqual(error_message.text, "Invalid username or password")
+        
+    def test_invalid_password(self):
+        """Negative Test Case: Test invalid password."""
+        
+        driver = self.driver
+        
+        # Find username, password fields and submit button
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login_button")
+        
+        # Fill in the login details (invalid password)
+        username_field.send_keys("validUser")
+        password_field.send_keys("invalidPassword")
+        
+        # Click the login button
+        login_button.click()
+        
+        # Wait for error message
+        error_message = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "error_message")))  # Change as per your site
+        
+        # Verify that the error message appears for invalid password
+        self.assertEqual(error_message.text, "Invalid username or password")
+        
+    def test_empty_username(self):
+        """Negative Test Case: Test empty username field."""
+        
+        driver = self.driver
+        
+        # Find username, password fields and submit button
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login_button")
+        
+        # Leave username empty, fill password
+        username_field.send_keys("")
+        password_field.send_keys("validPassword")
+        
+        # Click the login button
+        login_button.click()
+        
+        # Wait for error message
+        error_message = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "error_message")))  # Change as per your site
+        
+        # Verify that the error message appears for empty username
+        self.assertEqual(error_message.text, "Username is required")
+        
+    def test_empty_password(self):
+        """Negative Test Case: Test empty password field."""
+        
+        driver = self.driver
+        
+        # Find username, password fields and submit button
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login_button")
+        
+        # Fill username, leave password empty
+        username_field.send_keys("validUser")
+        password_field.send_keys("")
+        
+        # Click the login button
+        login_button.click()
+        
+        # Wait for error message
+        error_message = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "error_message")))  # Change as per your site
+        
+        # Verify that the error message appears for empty password
+        self.assertEqual(error_message.text, "Password is required")
+        
+    def test_empty_fields(self):
+        """Negative Test Case: Test empty username and password fields."""
+        
+        driver = self.driver
+        
+        # Find username, password fields and submit button
+        username_field = driver.find_element(By.ID, "username")
+        password_field = driver.find_element(By.ID, "password")
+        login_button = driver.find_element(By.ID, "login_button")
+        
+        # Leave both fields empty
+        username_field.send_keys("")
+        password_field.send_keys("")
+        
+        # Click the login button
+        login_button.click()
+        
+        # Wait for error message
+        error_message = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.ID, "error_message")))  # Change as per your site
+        
+        # Verify that the error message appears for both fields being empty
+        self.assertEqual(error_message.text, "Both fields are required")
+
+    @classmethod
+    def tearDownClass(cls):
+        # Close the browser after tests
+        cls.driver.quit()
+
+if __name__ == "__main__":
+    unittest.main()
