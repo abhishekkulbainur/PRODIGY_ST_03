@@ -1,0 +1,8 @@
+setUpClass: Initializes the WebDriver, opens the browser, and navigates to the login page of the e-commerce website.
+test_valid_login: Tests valid credentials (username and password) and verifies that the login is successful by checking for a welcome message or similar confirmation.
+test_invalid_username: Tests for an invalid username with a valid password and verifies that the appropriate error message is shown.
+test_invalid_password: Tests for an invalid password with a valid username and verifies that the appropriate error message is shown.
+test_empty_username: Tests submitting the form with an empty username field and verifies the error message.
+test_empty_password: Tests submitting the form with an empty password field and verifies the error message.
+test_empty_fields: Tests submitting the form with both fields empty and verifies the error message.
+tearDownClass: Closes the browser after all tests are completed.
